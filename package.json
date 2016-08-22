@@ -1,0 +1,18 @@
+{
+  "name": "accidentAnalysis",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tile-reduce": "^3.0.2",
+    "@turf/turf": "^3.3.3"
+  },
+  "devDependencies": {}
+}
