@@ -23,7 +23,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
     var accidentsInBuffer = 0;
     var buffer = turf.buffer(feature, 100, 'meters');
     accidents.features.forEach(function(accident) {
-      if(turf.inside(accident, buffer.features[0])) {
+      if(turf.inside(accident, buffer)) {
           accidentsInBuffer += 1;
       }
     });
@@ -33,7 +33,7 @@ module.exports = function(tileLayers, tile, writeData, done) {
 
   // write all roundabouts to stdout
   if (osmResult.length > 0) {
-    var fc = turf.featurecollection(osmResult);
+    var fc = turf.featureCollection(osmResult);
     writeData(JSON.stringify(fc) + '\n');
   }
 

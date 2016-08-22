@@ -9,18 +9,16 @@ var path = require('path');
 
 
 tileReduce({
-	bbox: [-122.5211, 37.7379, -122.3547, 37.8124],
-
   zoom: 12,
   map: path.join(__dirname, '/park.js'),
   sources: [{
     name: 'osm',
-    mbtiles: __dirname + '/latest.planet.mbtiles',
+    mbtiles: '../united_states_of_america.mbtiles',
     raw: false
   },
   {
     name: 'accidentTiles',
-    mbtiles: __dirname + '/accident.mbtiles',
+    mbtiles: '../accident.mbtiles',
     raw: false
   }]
 })
