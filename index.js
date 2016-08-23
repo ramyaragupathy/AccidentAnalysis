@@ -16,7 +16,7 @@ tileReduce({
         raw: false
     }]
 })
-.on('reduce', function () {
+.on('reduce', function (hai) {
 
 })
 .on('end', function () {
