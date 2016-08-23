@@ -5,7 +5,8 @@ module.exports = function (tileLayers, tile, writeData, done) {
     var osmLayer = tileLayers.osm.osm;
     var accidents = tileLayers.accidentTiles.accident;
 
-    accidents.features.forEach(function (accidentFeature) {
+    for (var i=0; i < accidents.features.length; i++) {
+        var accidentFeature = accidents.features[i];
         accidentFeature.properties = {
             'state': accidentFeature.properties.state,
             'crashNum': accidentFeature.properties.crashNum,
@@ -41,7 +42,7 @@ module.exports = function (tileLayers, tile, writeData, done) {
                 }
             }
         });
-    });
+    };
 
     // write all roundabouts to stdout
     writeData(JSON.stringify(accidents) + '\n');
