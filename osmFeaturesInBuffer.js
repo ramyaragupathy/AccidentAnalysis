@@ -11,7 +11,8 @@ module.exports = function (tileLayers, tile, writeData, done) {
         var accidentBuffer = turf.buffer(accidentFeature, 100, 'meters');
         var keys = Object.keys(accidentFeature.properties);
         osmLayer.features.forEach(function (osmFeature) {
-            if (osmFeature.properties.amenity) {
+            var propertyName;
+            if (osmFeature.properties.amenity || osmFeature.properties.highway) {
                 var flag = false;
                 switch (osmFeature.geometry.type) {
                 case 'Point': flag = turf.inside(osmFeature, accidentBuffer);
@@ -25,14 +26,27 @@ module.exports = function (tileLayers, tile, writeData, done) {
                     break;
                 }
                 if (flag) {
-                    if (keys.indexOf(osmFeature.properties.amenity) === -1) {
-                        accidentFeature.properties[osmFeature.properties.amenity + 'Count'] = 1;
-                        accidentFeature.properties[osmFeature.properties.amenity + 'Name'] = [];
-                        accidentFeature.properties[osmFeature.properties.amenity + 'ID'] = [];
-                    } else {
-                        accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
-                        accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
-                        accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
+                    if (osmFeature.properties.amenity) {
+                        if (keys.indexOf(osmFeature.properties.amenity) === -1) {
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] = 1;
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'] = [];
+                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'] = [];
+                        } else {
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
+                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
+                       }
+                    }
+                    if (osmFeature.properties.amenity) {
+                        if (keys.indexOf(osmFeature.properties.amenity) === -1) {
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] = 1;
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'] = [];
+                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'] = [];
+                        } else {
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
+                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
+                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
+                       }
                     }
                 }
             }
