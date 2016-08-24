@@ -11,17 +11,17 @@ module.exports = function (tileLayers, tile, writeData, done) {
         var accidentBuffer = turf.buffer(accidentFeature, 100, 'meters');
         var keys = Object.keys(accidentFeature.properties);
         osmLayer.features.forEach(function (osmFeature) {
-            var propertyName;
             if (osmFeature.properties.amenity || osmFeature.properties.highway) {
                 var flag = false;
+                var intersect;
                 switch (osmFeature.geometry.type) {
                 case 'Point': flag = turf.inside(osmFeature, accidentBuffer);
                     break;
-                case 'Polygon': var intersect = turf.intersect(accidentBuffer, osmFeature);
+                case 'Polygon': intersect = turf.intersect(accidentBuffer, osmFeature);
                     flag = intersect;
                     break;
                 case 'LineString': var featureBuffer = turf.buffer(osmFeature, '0.001', 'meters');
-                    var intersect = turf.intersect(accidentBuffer, featureBuffer);
+                    intersect = turf.intersect(accidentBuffer, featureBuffer);
                     flag = intersect;
                     break;
                 }
@@ -35,18 +35,18 @@ module.exports = function (tileLayers, tile, writeData, done) {
                             accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
                             accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
                             accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
-                       }
+                        }
                     }
-                    if (osmFeature.properties.amenity) {
-                        if (keys.indexOf(osmFeature.properties.amenity) === -1) {
-                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] = 1;
-                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'] = [];
-                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'] = [];
+                    if (osmFeature.properties.highway) {
+                        if (keys.indexOf(osmFeature.properties.highway) === -1) {
+                            accidentFeature.properties[osmFeature.properties.highway + 'Count'] = 1;
+                            accidentFeature.properties[osmFeature.properties.highway + 'Name'] = [];
+                            accidentFeature.properties[osmFeature.properties.highway + 'ID'] = [];
                         } else {
-                            accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
-                            accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
-                            accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
-                       }
+                            accidentFeature.properties[osmFeature.properties.highway + 'Count'] += 1;
+                            accidentFeature.properties[osmFeature.properties.highway + 'Name'].push(osmFeature.properties.name);
+                            accidentFeature.properties[osmFeature.properties.highway + 'ID'].push(osmFeature.properties['@id']);
+                        }
                     }
                 }
             }
