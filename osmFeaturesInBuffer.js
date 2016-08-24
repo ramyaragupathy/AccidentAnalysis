@@ -4,15 +4,10 @@ var turf = require('turf');
 module.exports = function (tileLayers, tile, writeData, done) {
     var osmLayer = tileLayers.osm.osm;
     var accidents = tileLayers.accidentTiles.accident;
-    try {
     if (osmLayer && accidents)
     for (var i=0; i < accidents.features.length; i++) {
+    try {
         var accidentFeature = accidents.features[i];
-        accidentFeature.properties = {
-            'state': accidentFeature.properties.state,
-            'crashNum': accidentFeature.properties.crashNum,
-            'fatalities': accidentFeature.properties.fatalities
-        };
         var accidentBuffer = turf.buffer(accidentFeature, 100, 'meters');
         var keys = Object.keys(accidentFeature.properties);
         osmLayer.features.forEach(function (osmFeature) {
@@ -35,16 +30,17 @@ module.exports = function (tileLayers, tile, writeData, done) {
                         accidentFeature.properties[osmFeature.properties.amenity + 'Name'] = [];
                         accidentFeature.properties[osmFeature.properties.amenity + 'ID'] = [];
                     } else {
-                        accidentFeature.properties[osmFeature.properties.amenity + 'Count']++;
+                        accidentFeature.properties[osmFeature.properties.amenity + 'Count'] += 1;
                         accidentFeature.properties[osmFeature.properties.amenity + 'Name'].push(osmFeature.properties.name);
                         accidentFeature.properties[osmFeature.properties.amenity + 'ID'].push(osmFeature.properties['@id']);
                     }
                 }
             }
         });
+      } catch (e) {
+        continue;
+      }
     };
-    } catch (e) {
-    }
 
     // write all roundabouts to stdout
     writeData(JSON.stringify(accidents) + '\n');
